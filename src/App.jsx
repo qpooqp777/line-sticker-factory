@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
 import Header from './components/Header'
+import PromptGenerator from './components/PromptGenerator'
 import GridImageUploader from './components/GridImageUploader'
 import GridSlicer from './components/GridSlicer'
 import StickerSelector from './components/StickerSelector'
@@ -45,6 +46,8 @@ function AppContent() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Upload & Slice */}
           <div className="lg:col-span-2 space-y-6">
+            <PromptGenerator />
+            
             <GridImageUploader 
               gridImage={gridImage}
               onImageLoaded={handleGridImageLoaded}
