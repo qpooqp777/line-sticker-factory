@@ -21,7 +21,7 @@ export default function StickerSelector({ stickers, mainSticker, tabSticker, onM
         {/* Main Image Selection */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-[var(--color-text)]">{t('mainLabel')}</label>
-          <div className="aspect-square rounded-xl overflow-hidden border-2 border-dashed border-[var(--color-border)] bg-[var(--color-surface)] flex items-center justify-center">
+          <div className="aspect-square rounded-xl overflow-hidden border-2 border-dashed border-neutral-400 bg-[var(--color-surface)] flex items-center justify-center">
             {mainSticker ? (
               <img 
                 src={mainSticker.src} 
@@ -37,7 +37,7 @@ export default function StickerSelector({ stickers, mainSticker, tabSticker, onM
         {/* Tab Image Selection */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-[var(--color-text)]">{t('tabLabel')}</label>
-          <div className="aspect-square rounded-xl overflow-hidden border-2 border-dashed border-[var(--color-border)] bg-[var(--color-surface)] flex items-center justify-center">
+          <div className="aspect-square rounded-xl overflow-hidden border-2 border-dashed border-neutral-400 bg-[var(--color-surface)] flex items-center justify-center">
             {tabSticker ? (
               <img 
                 src={tabSticker.src} 

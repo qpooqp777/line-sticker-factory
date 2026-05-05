@@ -182,7 +182,7 @@ export default function GridSlicer({ gridImage, onStickersReady, removeBg, stick
             {stickers.map((sticker) => (
               <div 
                 key={sticker.id}
-                className="aspect-square rounded-lg overflow-hidden border border-[var(--color-border)] bg-[var(--color-surface)]"
+                className="aspect-square rounded-lg overflow-hidden border-2 border-dashed border-neutral-400 bg-[var(--color-surface)]"
               >
                 <img 
                   src={sticker.src} 
