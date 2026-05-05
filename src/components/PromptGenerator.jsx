@@ -74,6 +74,65 @@ const STYLES = {
 
 const EXPRESSIONS = ['喜', '怒', '哀', '樂', '驚訝', '無語', '放空', '大哭', '得意', '害羞', '無奈', '滿足']
 
+// Highlighted text component - red + larger font for dynamic parts
+function PromptPreview({ topic, style }) {
+  const topicData = TOPICS[topic]
+  const styleData = STYLES[style]
+
+  const lines = [
+    `請參考上傳圖片中的角色，生成 一張包含 12 個不同動作的角色貼圖集。`,
+    ``,
+    `[角色與風格設定]`,
+    `角色一致性：必須完全維持原圖主角的髮型、服裝、五官與整體外觀特徵。`,
+    `構圖風格：畫面僅包含「角色 + 文字」，不包含任何場景背景。`,
+    `畫風設定：【<mark>${styleData.style}</mark>】`,
+    `貼紙風格（去背友善）：角色與文字外圍皆需加入 粗白色外框（Sticker Style）。背景統一為 #00FF00（純綠色），不可有雜點。`,
+    ``,
+    `[畫面佈局與尺寸規格]`,
+    `整體為 4 × 3 佈局，共 12 張貼圖。總尺寸：2560 × 1664 px。`,
+    `每張小圖約 370 × 320 px（自動等比縮放填滿排列）。每張貼圖四周預留約 0.2 cm Padding，避免畫面互相黏住。`,
+    `鏡頭多樣化：全身 + 半身混合，必須包含正面、側面、俯角等不同視角。`,
+    ``,
+    `[文字設計]`,
+    `語言：台灣繁體中文`,
+    `文字內容：<mark>${topicData.texts.join('、')}</mark>`,
+    `字型風格：可愛 Q 版字型，顏色鮮豔、易讀，多色彩混合，絕對禁止使用任何綠色（包含深綠、淺綠、螢光綠、藍綠）與黑色，因為會導致去背錯誤。請改用紅、藍、紫、橘、黃等高對比色彩。`,
+    `排版：文字大小約佔單張貼圖 1/3，文字可適度壓在衣服邊角等非重要區域，不能遮臉，也不要使用任何emoji表情符號。`,
+    ``,
+    `[表情與動作設計]`,
+    `表情必須明顯、誇張、情緒豐富：<mark>${EXPRESSIONS.join('、')}</mark>`,
+    `角色動作需與文字情境一致：${topicData.actions.map((a, i) => `【${topicData.texts[i]}配${a}】`).join('、')}`,
+    `12 格皆須為 不同動作與不同表情。`,
+    ``,
+    `[輸出格式]`,
+    `一張大圖，內含 4 × 3 的 12 張貼圖。背景必須為 純綠色 #00FF00。每格角色 + 文字均附上粗白邊。`,
+  ]
+
+  return (
+    <>
+      {lines.map((line, i) => {
+        if (line.includes('<mark>')) {
+          // Split by <mark> tags and render with highlighting
+          const parts = line.split(/(<mark>.*?<\/mark>)/g)
+          return (
+            <span key={i}>
+              {parts.map((part, j) => {
+                if (part.startsWith('<mark>')) {
+                  const text = part.replace('<mark>', '').replace('</mark>', '')
+                  return <mark key={j} className="text-red-500 font-bold text-base bg-transparent">{text}</mark>
+                }
+                return <span key={j}>{part}</span>
+              })}
+              {'\n'}
+            </span>
+          )
+        }
+        return <span key={i}>{line}{'\n'}</span>
+      })}
+    </>
+  )
+}
+
 export default function PromptGenerator() {
   const { t, lang } = useLanguage()
   const [selectedTopic, setSelectedTopic] = useState('daily')
@@ -210,9 +269,9 @@ export default function PromptGenerator() {
           </button>
         </div>
         <div className="p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
-          <pre className="text-xs whitespace-pre-wrap font-mono text-[var(--color-text-secondary)] max-h-48 overflow-y-auto">
-            {generatePrompt()}
-          </pre>
+          <div className="text-xs whitespace-pre-wrap font-mono text-[var(--color-text-secondary)] max-h-48 overflow-y-auto">
+            <PromptPreview topic={selectedTopic} style={selectedStyle} />
+          </div>
         </div>
       </div>
     </div>
