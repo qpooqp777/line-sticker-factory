@@ -111,9 +111,8 @@ export default function GridSlicer({ gridImage, onStickersReady, removeBg, stick
       b: Math.round(samples.reduce((a, s) => a + s.b, 0) / samples.length),
     }
     
-    // Color distance threshold (0-255)
-    const threshold = 35
-    const edgeFeather = 15
+    // Hard threshold - no feathering to avoid color bleeding
+    const threshold = 40
     
     for (let i = 0; i < data.length; i += 4) {
       const r = data[i]
@@ -127,14 +126,11 @@ export default function GridSlicer({ gridImage, onStickersReady, removeBg, stick
         Math.pow(b - avgBg.b, 2)
       )
       
+      // Hard cutoff - either fully transparent or keep original
       if (dist < threshold) {
-        // Full transparency for exact matches
         data[i + 3] = 0
-      } else if (dist < threshold + edgeFeather) {
-        // Feather the edges
-        const alpha = Math.round(((dist - threshold) / edgeFeather) * 255)
-        data[i + 3] = alpha
       }
+      // Otherwise keep original alpha (no feathering)
     }
     
     ctx.putImageData(imageData, 0, 0)
