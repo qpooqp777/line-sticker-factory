@@ -111,8 +111,8 @@ export default function GridSlicer({ gridImage, onStickersReady, removeBg, stick
       b: Math.round(samples.reduce((a, s) => a + s.b, 0) / samples.length),
     }
     
-    // Hard threshold - no feathering to avoid color bleeding
-    const threshold = 40
+    // Hard threshold - remove any pixel close to background color
+    const threshold = 80
     
     for (let i = 0; i < data.length; i += 4) {
       const r = data[i]
