@@ -134,7 +134,42 @@ export default function GridSlicer({ gridImage, onStickersReady, removeBg, stick
     }
     
     ctx.putImageData(imageData, 0, 0)
+    
+    // Convert remaining green-ish lines to black
+    convertGreenToBlack(ctx, width, height)
+    
     return canvas.toDataURL('image/png')
+  }
+
+  // Convert remaining green-ish pixels to black (for colored lines)
+  const convertGreenToBlack = (ctx, width, height) => {
+    const imageData = ctx.getImageData(0, 0, width, height)
+    const data = imageData.data
+    
+    // Check if pixel is green-ish (more green than red and blue)
+    const greenThreshold = 30 // Green must be at least this much higher than R/B
+    
+    for (let i = 0; i < data.length; i += 4) {
+      // Skip transparent pixels
+      if (data[i + 3] === 0) continue
+      
+      const r = data[i]
+      const g = data[i + 1]
+      const b = data[i + 2]
+      
+      // If green is dominant and not too bright (likely a line, not background)
+      const isGreenish = g > r + greenThreshold && g > b + greenThreshold
+      const isDarkish = g < 220 // Not too bright
+      
+      if (isGreenish && isDarkish) {
+        // Change to black
+        data[i] = 0     // r
+        data[i + 1] = 0 // g
+        data[i + 2] = 0 // b
+      }
+    }
+    
+    ctx.putImageData(imageData, 0, 0)
   }
 
   if (!gridImage) {
