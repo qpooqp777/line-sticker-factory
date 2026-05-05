@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #22c55e;
+    --color-bg: #ffffff;
+    --color-surface: #f7f7f7;
+    --color-text: #1a1a1a;
+    --color-text-secondary: #666666;
+    --color-border: #e5e5e5;
+  }
+
+  .dark {
+    --color-primary: #4ade80;
+    --color-bg: #0f172a;
+    --color-surface: #1e293b;
+    --color-text: #f1f5f9;
+    --color-text-secondary: #94a3b8;
+    --color-border: #334155;
+  }
+
+  body {
+    @apply bg-[var(--color-bg)] text-[var(--color-text)] transition-colors duration-300;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-primary-500 text-white font-medium rounded-lg 
+           hover:bg-primary-600 transition-all duration-200 
+           disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md;
+  }
+
+  .card {
+    @apply bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-4 
+           transition-all duration-300 shadow-sm;
+  }
+
+  .drop-zone {
+    @apply border-2 border-dashed border-[var(--color-border)] rounded-xl p-8 
+           flex flex-col items-center justify-center gap-3 cursor-pointer
+           hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20
+           transition-all duration-200;
+  }
+
+  .drop-zone.dragover {
+    @apply border-primary-500 bg-primary-50 dark:bg-primary-900/20 scale-[1.02];
+  }
+
+  .lang-btn {
+    @apply px-3 py-1 text-sm font-medium rounded-md transition-all duration-200;
+  }
+
+  .lang-btn.active {
+    @apply bg-primary-500 text-white shadow-sm;
+  }
+
+  .lang-btn:not(.active) {
+    @apply text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface)];
+  }
+
+  .mode-btn {
+    @apply p-2 rounded-lg transition-all duration-200 hover:bg-[var(--color-surface)];
+  }
+
+  .sticker-grid {
+    @apply grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3;
+  }
+
+  .sticker-item {
+    @apply aspect-square rounded-lg overflow-hidden cursor-pointer 
+           border-2 border-transparent hover:border-primary-500 
+           transition-all duration-200 hover:scale-105 hover:shadow-lg;
+  }
+
+  .sticker-item.selected {
+    @apply border-primary-500 ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-[var(--color-bg)];
+  }
+
+  .preview-sticker {
+    @apply rounded-lg overflow-hidden bg-[var(--color-surface)] border border-[var(--color-border)];
+  }
+}
