@@ -1,11 +1,67 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
-import { GRID_CONFIG, getStickerSize, LINE_STICKER_SIZES } from '../i18n'
+import { GRID_CONFIG, getStickerSize } from '../i18n'
+import removeBackground from '@imgly/background-removal'
 
 export default function GridSlicer({ gridImage, onStickersReady, removeBg, stickers }) {
   const { t } = useLanguage()
   const [isProcessing, setIsProcessing] = useState(false)
   const [progress, setProgress] = useState(0)
+  const [modelDownloading, setModelDownloading] = useState(false)
+
+  // Convert data URL to Blob
+  const dataURLtoBlob = (dataURL) => {
+    const arr = dataURL.split(',')
+    const mime = arr[0].match(/:(.*?);/)[1]
+    const bstr = atob(arr[1])
+    let n = bstr.length
+    const u8arr = new Uint8Array(n)
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n)
+    }
+    return new Blob([u8arr], { type: mime })
+  }
+
+  // Convert Blob to data URL
+  const blobToDataURL = (blob) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(reader.result)
+      reader.readAsDataURL(blob)
+    })
+  }
+
+  // AI-powered background removal using @imgly/background-removal
+  const removeBackgroundAI = async (canvas) => {
+    const blob = await new Promise((resolve) => {
+      canvas.toBlob(resolve, 'image/png')
+    })
+
+    try {
+      const resultBlob = await removeBackground(blob, {
+        progress: (key, current, total) => {
+          if (key === 'fetch-model' || key.startsWith('download')) {
+            setModelDownloading(true)
+            const pct = Math.round((current / total) * 100)
+            setProgress(pct)
+          }
+        },
+        output: {
+          format: 'image/png',
+          quality: 1,
+        },
+        model: 'u2net', // Fast general-purpose model
+      })
+      
+      setModelDownloading(false)
+      return await blobToDataURL(resultBlob)
+    } catch (error) {
+      console.error('Background removal error:', error)
+      setModelDownloading(false)
+      // Fallback to original if AI removal fails
+      return canvas.toDataURL('image/png')
+    }
+  }
 
   const sliceImage = useCallback(async () => {
     if (!gridImage) return
@@ -46,10 +102,14 @@ export default function GridSlicer({ gridImage, onStickersReady, removeBg, stick
           stickerSize.height        // dest height
         )
 
-        // Remove background if enabled
+        // Remove background if enabled (AI-powered)
         let imageData = canvas.toDataURL('image/png')
         if (removeBg) {
-          imageData = removeBackground(canvas)
+          if (modelDownloading) {
+            // Skip if model is still downloading
+          } else {
+            imageData = await removeBackgroundAI(canvas)
+          }
         }
 
         slicedStickers.push({
@@ -59,17 +119,20 @@ export default function GridSlicer({ gridImage, onStickersReady, removeBg, stick
           col,
         })
         
-        setProgress((index / GRID_CONFIG.stickerCount) * 100)
+        if (!removeBg) {
+          setProgress((index / GRID_CONFIG.stickerCount) * 100)
+        }
         // Small delay to show progress
-        await new Promise(r => setTimeout(r, 50))
+        await new Promise(r => setTimeout(r, 30))
       }
     }
 
     onStickersReady(slicedStickers)
     setIsProcessing(false)
-  }, [gridImage, removeBg, onStickersReady])
+    setModelDownloading(false)
+  }, [gridImage, removeBg, onStickersReady, modelDownloading])
 
-  // Auto-slice when image is loaded or removeBg changes
+  // Auto-slice when image is loaded
   useEffect(() => {
     if (gridImage && stickers.length === 0) {
       sliceImage()
@@ -82,95 +145,6 @@ export default function GridSlicer({ gridImage, onStickersReady, removeBg, stick
       sliceImage()
     }
   }, [removeBg])
-
-  // Smart background removal - detects dominant color from edges/corners
-  const removeBackground = (canvas) => {
-    const ctx = canvas.getContext('2d')
-    const width = canvas.width
-    const height = canvas.height
-    const imageData = ctx.getImageData(0, 0, width, height)
-    const data = imageData.data
-    
-    // Sample background color from corners and edges
-    const samples = []
-    const samplePoints = [
-      [0, 0], [width - 1, 0], [0, height - 1], [width - 1, height - 1], // corners
-      [Math.floor(width / 2), 0], [Math.floor(width / 2), height - 1], // top/bottom middle
-      [0, Math.floor(height / 2)], [width - 1, Math.floor(height / 2)], // left/right middle
-    ]
-    
-    for (const [x, y] of samplePoints) {
-      const idx = (y * width + x) * 4
-      samples.push({ r: data[idx], g: data[idx + 1], b: data[idx + 2] })
-    }
-    
-    // Calculate average background color
-    const avgBg = {
-      r: Math.round(samples.reduce((a, s) => a + s.r, 0) / samples.length),
-      g: Math.round(samples.reduce((a, s) => a + s.g, 0) / samples.length),
-      b: Math.round(samples.reduce((a, s) => a + s.b, 0) / samples.length),
-    }
-    
-    // Hard threshold - remove any pixel close to background color
-    const threshold = 80
-    
-    for (let i = 0; i < data.length; i += 4) {
-      const r = data[i]
-      const g = data[i + 1]
-      const b = data[i + 2]
-      
-      // Calculate color distance to background
-      const dist = Math.sqrt(
-        Math.pow(r - avgBg.r, 2) +
-        Math.pow(g - avgBg.g, 2) +
-        Math.pow(b - avgBg.b, 2)
-      )
-      
-      // Hard cutoff - either fully transparent or keep original
-      if (dist < threshold) {
-        data[i + 3] = 0
-      }
-      // Otherwise keep original alpha (no feathering)
-    }
-    
-    ctx.putImageData(imageData, 0, 0)
-    
-    // Convert remaining green-ish lines to black
-    convertGreenToBlack(ctx, width, height)
-    
-    return canvas.toDataURL('image/png')
-  }
-
-  // Convert remaining green-ish pixels to black (for colored lines)
-  const convertGreenToBlack = (ctx, width, height) => {
-    const imageData = ctx.getImageData(0, 0, width, height)
-    const data = imageData.data
-    
-    // Check if pixel is green-ish (more green than red and blue)
-    const greenThreshold = 30 // Green must be at least this much higher than R/B
-    
-    for (let i = 0; i < data.length; i += 4) {
-      // Skip transparent pixels
-      if (data[i + 3] === 0) continue
-      
-      const r = data[i]
-      const g = data[i + 1]
-      const b = data[i + 2]
-      
-      // If green is dominant and not too bright (likely a line, not background)
-      const isGreenish = g > r + greenThreshold && g > b + greenThreshold
-      const isDarkish = g < 220 // Not too bright
-      
-      if (isGreenish && isDarkish) {
-        // Change to black
-        data[i] = 0     // r
-        data[i + 1] = 0 // g
-        data[i + 2] = 0 // b
-      }
-    }
-    
-    ctx.putImageData(imageData, 0, 0)
-  }
 
   if (!gridImage) {
     return null
@@ -186,11 +160,23 @@ export default function GridSlicer({ gridImage, onStickersReady, removeBg, stick
       {isProcessing ? (
         <div className="space-y-3">
           <div className="flex items-center gap-3">
-            <svg className="animate-spin w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-            </svg>
-            <span>{t('processingTitle')}</span>
+            {modelDownloading ? (
+              <>
+                <svg className="animate-spin w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                <span className="text-sm">下載 AI 模型中... {progress}%</span>
+              </>
+            ) : (
+              <>
+                <svg className="animate-spin w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                <span>{t('processingTitle')}</span>
+              </>
+            )}
           </div>
           <div className="w-full bg-[var(--color-border)] rounded-full h-2">
             <div 
