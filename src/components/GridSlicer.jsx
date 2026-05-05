@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { GRID_CONFIG, getStickerSize } from '../i18n'
-import removeBackground from '@imgly/background-removal'
+import { removeBackground } from '@imgly/background-removal'
 
 export default function GridSlicer({ gridImage, onStickersReady, removeBg, stickers }) {
   const { t } = useLanguage()
