@@ -49,7 +49,7 @@ export default function GridSlicer({ gridImage, onStickersReady, removeBg, stick
         // Remove background if enabled
         let imageData = canvas.toDataURL('image/png')
         if (removeBg) {
-          imageData = removeWhiteBackground(canvas)
+          imageData = removeBackground(canvas)
         }
 
         slicedStickers.push({
@@ -83,23 +83,57 @@ export default function GridSlicer({ gridImage, onStickersReady, removeBg, stick
     }
   }, [removeBg])
 
-  // Simple white background removal
-  const removeWhiteBackground = (canvas) => {
+  // Smart background removal - detects dominant color from edges/corners
+  const removeBackground = (canvas) => {
     const ctx = canvas.getContext('2d')
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    const width = canvas.width
+    const height = canvas.height
+    const imageData = ctx.getImageData(0, 0, width, height)
     const data = imageData.data
     
-    // White threshold (adjustable)
-    const threshold = 240
+    // Sample background color from corners and edges
+    const samples = []
+    const samplePoints = [
+      [0, 0], [width - 1, 0], [0, height - 1], [width - 1, height - 1], // corners
+      [Math.floor(width / 2), 0], [Math.floor(width / 2), height - 1], // top/bottom middle
+      [0, Math.floor(height / 2)], [width - 1, Math.floor(height / 2)], // left/right middle
+    ]
+    
+    for (const [x, y] of samplePoints) {
+      const idx = (y * width + x) * 4
+      samples.push({ r: data[idx], g: data[idx + 1], b: data[idx + 2] })
+    }
+    
+    // Calculate average background color
+    const avgBg = {
+      r: Math.round(samples.reduce((a, s) => a + s.r, 0) / samples.length),
+      g: Math.round(samples.reduce((a, s) => a + s.g, 0) / samples.length),
+      b: Math.round(samples.reduce((a, s) => a + s.b, 0) / samples.length),
+    }
+    
+    // Color distance threshold (0-255)
+    const threshold = 35
+    const edgeFeather = 15
     
     for (let i = 0; i < data.length; i += 4) {
       const r = data[i]
       const g = data[i + 1]
       const b = data[i + 2]
       
-      // If pixel is close to white, make it transparent
-      if (r > threshold && g > threshold && b > threshold) {
-        data[i + 3] = 0 // Set alpha to 0
+      // Calculate color distance to background
+      const dist = Math.sqrt(
+        Math.pow(r - avgBg.r, 2) +
+        Math.pow(g - avgBg.g, 2) +
+        Math.pow(b - avgBg.b, 2)
+      )
+      
+      if (dist < threshold) {
+        // Full transparency for exact matches
+        data[i + 3] = 0
+      } else if (dist < threshold + edgeFeather) {
+        // Feather the edges
+        const alpha = Math.round(((dist - threshold) / edgeFeather) * 255)
+        data[i + 3] = alpha
       }
     }
     

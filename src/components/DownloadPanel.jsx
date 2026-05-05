@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { LINE_STICKER_SIZES } from '../i18n'
+import JSZip from 'jszip'
 
 export default function DownloadPanel({ stickers, mainSticker, tabSticker, startNumber }) {
   const { t } = useLanguage()
@@ -34,6 +35,19 @@ export default function DownloadPanel({ stickers, mainSticker, tabSticker, start
     })
   }
 
+  // Convert data URL to Blob
+  const dataURLtoBlob = (dataURL) => {
+    const arr = dataURL.split(',')
+    const mime = arr[0].match(/:(.*?);/)[1]
+    const bstr = atob(arr[1])
+    let n = bstr.length
+    const u8arr = new Uint8Array(n)
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n)
+    }
+    return new Blob([u8arr], { type: mime })
+  }
+
   const downloadAll = async () => {
     if (stickers.length === 0) {
       alert(t('errorNoImage'))
@@ -43,48 +57,42 @@ export default function DownloadPanel({ stickers, mainSticker, tabSticker, start
     setIsDownloading(true)
 
     try {
-      const files = []
+      const zip = new JSZip()
       const stickerSize = LINE_STICKER_SIZES.sticker
 
       // Add all stickers
       for (let i = 0; i < stickers.length; i++) {
         const resized = await resizeImage(stickers[i].src, stickerSize.width, stickerSize.height)
-        files.push({
-          name: `${startNumber + i}.png`,
-          data: resized,
-        })
+        const blob = dataURLtoBlob(resized)
+        zip.file(`${startNumber + i}.png`, blob)
       }
 
       // Add main image
       if (mainSticker) {
         const mainSize = LINE_STICKER_SIZES.main
         const mainResized = await resizeImage(mainSticker.src, mainSize.width, mainSize.height)
-        files.push({
-          name: 'main.png',
-          data: mainResized,
-        })
+        const blob = dataURLtoBlob(mainResized)
+        zip.file('main.png', blob)
       }
 
       // Add tab image
       if (tabSticker) {
         const tabSize = LINE_STICKER_SIZES.tab
         const tabResized = await resizeImage(tabSticker.src, tabSize.width, tabSize.height)
-        files.push({
-          name: 'tab.png',
-          data: tabResized,
-        })
+        const blob = dataURLtoBlob(tabResized)
+        zip.file('tab.png', blob)
       }
 
-      // Download each file
-      for (const file of files) {
-        const link = document.createElement('a')
-        link.href = file.data
-        link.download = file.name
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        await new Promise(r => setTimeout(r, 100)) // Small delay between downloads
-      }
+      // Generate and download ZIP
+      const content = await zip.generateAsync({ type: 'blob' })
+      const url = URL.createObjectURL(content)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `line-stickers-${startNumber}-${startNumber + 11}.zip`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
 
       alert(t('successMessage'))
     } catch (error) {
