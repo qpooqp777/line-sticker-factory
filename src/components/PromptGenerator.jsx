@@ -397,4 +397,42 @@ export default function PromptGenerator() {
       </div>
     </div>
   )
-}
+},
+  work: {
+    label: { 'zh-TW': '💼 上班日常', en: '💼 Work Life' },
+    faceStyle: '寫實照片風格不用重新手繪',
+    clothingStyle: '服裝用手繪方式呈現',
+    stickers: [
+      { emoji: '1️⃣', title: '收到', text: '收到！', action: '迅速回覆email', effect: '閃電郵件' },
+      { emoji: '2️⃣', title: '馬上改', text: '馬上改！', action: '瘋狂敲鍵盤', effect: '鍵盤火花' },
+      { emoji: '3️⃣', title: '開會中', text: '開會中...', action: '嚴肅表情開會', effect: '會議記錄' },
+      { emoji: '4️⃣', title: '加班中', text: '加班中...', action: '盯著電腦的眼神死', effect: '深夜加班燈' },
+      { emoji: '5️⃣', title: '準時下班', text: '下班！', action: '衝出門興奮', effect: '夕陽奔跑' },
+      { emoji: '6️⃣', title: '心累', text: '心累...', action: '靈魂出竅趴桌', effect: '靈魂飄走' },
+      { emoji: '7️⃣', title: '報告長官', text: '報告！', action: '立正敬禮', effect: '報告紙張' },
+      { emoji: '8️⃣', title: '辛苦了', text: '辛苦了！', action: '拍拍對方肩膀', effect: '辛苦汗水' },
+      { emoji: '9️⃣', title: '求放過', text: '求放过！', action: '雙手合十拜託', effect: '可憐泡泡' },
+      { emoji: '🔟', title: '薪水呢', text: '薪水呢？', action: '伸手要錢', effect: '金幣閃閃' },
+      { emoji: '1️⃣1️⃣', title: '不想上班', text: '不想上班...', action: '躺在床上裝死', effect: '躺平大字' },
+      { emoji: '1️⃣2️⃣', title: '加油', text: '加油！', action: '握拳打氣', effect: '努力火焰' }
+    ]
+  },
+  couple: {
+    label: { 'zh-TW': '💕 老公老婆', en: '💕 Couple' },
+    faceStyle: '寫實照片風格不用重新手繪',
+    clothingStyle: '服裝用手繪方式呈現',
+    stickers: [
+      { emoji: '1️⃣', title: '愛你', text: '愛你！', action: '發射飛吻', effect: '愛心飛沫' },
+      { emoji: '2️⃣', title: '想你', text: '想你～', action: '抱頭思念', effect: '思念星星' },
+      { emoji: '3️⃣', title: '抱抱', text: '抱抱！', action: '張開雙手求抱', effect: '擁抱光圈' },
+      { emoji: '4️⃣', title: '親親', text: '親親～', action: '嘟嘴要親', effect: '親親泡泡' },
+      { emoji: '5️⃣', title: '寶貝', text: '寶貝！', action: '寵溺眼神', effect: '愛心眼睛' },
+      { emoji: '6️⃣', title: '老公', text: '老公～', action: '撒嬌晃身體', effect: '老婆愛心' },
+      { emoji: '7️⃣', title: '老婆', text: '老婆！', action: '溫柔摟肩', effect: '老公的力量' },
+      { emoji: '8️⃣', title: '在幹嘛', text: '在幹嘛？', action: '探頭詢問', effect: '問號泡泡' },
+      { emoji: '9️⃣', title: '快回家', text: '快回家！', action: '等待門口', effect: '家門口' },
+      { emoji: '🔟', title: '買給我', text: '買給我啦！', action: '拽著衣角撒嬌', effect: '購物欲望' },
+      { emoji: '1️⃣1️⃣', title: '原諒我', text: '原諒我...', action: '跪算盤道歉', effect: '算盤珠' },
+      { emoji: '1️⃣2️⃣', title: '啾咪', text: '啾咪💋', action: 'wink+愛心嘴', effect: '發射愛心' }
+    ]
+  }
