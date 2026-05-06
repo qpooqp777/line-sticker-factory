@@ -316,7 +316,7 @@ function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, tw
       <span className="text-primary-500 font-bold text-sm">✅ 12 格角色貼圖集｜Prompt 建議</span>
       {'\n'}
       {'\n'}
-      請參考上傳圖片中的角色，用紅色字放大標示該角色，生成 一張包含 12 個不同動作的角色貼圖集。<mark className="text-red-500 font-bold text-base bg-transparent">也不要使用任何emoji表情符號。</mark>
+      <mark className="text-red-500 font-bold text-lg bg-transparent">請參考上傳圖片中的角色</mark>，生成 一張包含 12 個不同動作的角色貼圖集。<mark className="text-red-500 font-bold text-base bg-transparent">也不要使用任何emoji表情符號。</mark>
       {'\n'}
       {'\n'}
       {/* Style section */}
@@ -406,7 +406,7 @@ export default function PromptGenerator() {
     
     let prompt = `✅ 12 格角色貼圖集｜Prompt 建議
 
-請參考上傳圖片中的角色，用紅色字放大標示該角色，生成 一張包含 12 個不同動作的角色貼圖集，也不要使用任何emoji表情符號。
+請參考上傳圖片中的角色，生成 一張包含 12 個不同動作的角色貼圖集，也不要使用任何emoji表情符號。
 
 [角色與風格設定]
 角色一致性：必須完全維持原圖主角的髮型、服裝、五官與整體外觀特徵。${styleNote}${twoHeadNote ? ' ' + twoHeadNote : ''}
