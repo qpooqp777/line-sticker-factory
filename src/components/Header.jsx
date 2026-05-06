@@ -1,7 +1,7 @@
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from '../contexts/ThemeContext'
 
-export default function Header({ removeBg, onRemoveBgChange }) {
+export default function Header() {
   const { lang, setLang, t } = useLanguage()
   const { isDark, toggle } = useTheme()
 
@@ -22,17 +22,6 @@ export default function Header({ removeBg, onRemoveBgChange }) {
           </div>
           
           <div className="flex items-center gap-3">
-            {/* Remove Background Toggle */}
-            <label className="flex items-center gap-2 cursor-pointer px-3 py-2 rounded-lg bg-[var(--color-bg)] border border-[var(--color-border)] hover:border-primary-400 transition-colors">
-              <input
-                type="checkbox"
-                checked={removeBg}
-                onChange={(e) => onRemoveBgChange(e.target.checked)}
-                className="w-4 h-4 accent-primary-500"
-              />
-              <span className="text-sm text-[var(--color-text)] hidden sm:inline">{t('removeBgOption')}</span>
-            </label>
-            
             {/* Language Toggle */}
             <div className="flex items-center bg-[var(--color-bg)] rounded-lg p-1 border border-[var(--color-border)]">
               <button

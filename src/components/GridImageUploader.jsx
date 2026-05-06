@@ -1,7 +1,7 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, forwardRef } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 
-export default function GridImageUploader({ onImageLoaded, gridImage }) {
+const GridImageUploader = forwardRef(function GridImageUploader({ onImageLoaded, gridImage, removeBg, onRemoveBgChange }, ref) {
   const { t } = useLanguage()
   const [isDragging, setIsDragging] = useState(false)
   const [sizeWarning, setSizeWarning] = useState(null)
@@ -74,17 +74,29 @@ export default function GridImageUploader({ onImageLoaded, gridImage }) {
   }
 
   return (
-    <div className="card space-y-4">
+    <div ref={ref} className="card space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold flex items-center gap-2">
           <span className="w-7 h-7 bg-primary-500 text-white rounded-full flex items-center justify-center text-sm font-bold">1</span>
           {t('step1Title')}
         </h2>
-        {gridImage && (
-          <button onClick={handleClear} className="text-sm text-red-500 hover:text-red-600">
-            {t('clearAll')}
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {/* Auto Remove Background Toggle */}
+          <label className="flex items-center gap-2 cursor-pointer px-3 py-2 rounded-lg bg-[var(--color-bg)] border border-[var(--color-border)] hover:border-primary-400 transition-colors">
+            <input
+              type="checkbox"
+              checked={removeBg}
+              onChange={(e) => onRemoveBgChange(e.target.checked)}
+              className="w-4 h-4 accent-primary-500"
+            />
+            <span className="text-sm text-[var(--color-text)]">{t('removeBgOption')}</span>
+          </label>
+          {gridImage && (
+            <button onClick={handleClear} className="text-sm text-red-500 hover:text-red-600">
+              {t('clearAll')}
+            </button>
+          )}
+        </div>
       </div>
       
       <p className="text-sm text-[var(--color-text-secondary)]">{t('step1Desc')}</p>
@@ -133,4 +145,6 @@ export default function GridImageUploader({ onImageLoaded, gridImage }) {
       )}
     </div>
   )
-}
+})
+
+export default GridImageUploader
