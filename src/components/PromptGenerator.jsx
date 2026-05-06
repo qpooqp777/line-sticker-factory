@@ -278,7 +278,7 @@ const STYLES = {
 }
 
 // Preview component with highlighted dynamic parts
-function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, textLanguage, fontStyle, customFontDesc, layoutOption }) {
+function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, twoHeaded, textLanguage, fontStyle, customFontDesc, layoutOption }) {
   const data = STICKER_SETS[stickerSet]
   const styleData = STYLES[style]
 
@@ -289,6 +289,7 @@ function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, te
     if (clothingHanddrawn) parts.push('服裝可以用手繪')
     return parts.length > 0 ? parts.join('，') : null
   })()
+  const twoHeadNote = twoHeaded ? '人物符合二頭身比例（頭身比 2:1），頭大身小。' : null
 
   return (
     <>
@@ -304,11 +305,13 @@ function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, te
       {'\n'}
       <span className="text-neutral-600 dark:text-neutral-400">角色一致性：必須完全維持原圖主角的髮型、服裝、五官與整體外觀特徵。</span>
       {styleNote && <mark className="text-red-500 font-bold text-base bg-transparent">{styleNote}</mark>}
+      {twoHeadNote && <><span> </span><mark className="text-red-500 font-bold text-base bg-transparent">{twoHeadNote}</mark></>}
       {'\n'}
       <span className="text-neutral-600 dark:text-neutral-400">構圖風格：畫面僅包含「角色 + 文字」，不包含任何場景背景。</span>
       {'\n'}
       <span className="text-neutral-600 dark:text-neutral-400">畫風設定：【<mark className="text-red-500 font-bold text-base bg-transparent">{styleData.style}</mark>】。</span>
       {styleNote && <mark className="text-red-500 font-bold text-base bg-transparent">{styleNote}</mark>}
+      {twoHeadNote && <><span> </span><mark className="text-red-500 font-bold text-base bg-transparent">{twoHeadNote}</mark></>}
       {'\n'}
       <span className="text-neutral-600 dark:text-neutral-400">貼紙風格（去背友善）：角色與文字外圍皆需加入 粗白色外框（Sticker Style）。背景統一為 #00FF00（純綠色），不可有雜點。</span>
       {'\n'}
@@ -365,6 +368,7 @@ export default function PromptGenerator() {
   const [copied, setCopied] = useState(false)
   const [faceRealistic, setFaceRealistic] = useState(true) // 預設勾選：頭像用寫實
   const [clothingHanddrawn, setClothingHanddrawn] = useState(true) // 預設勾選：衣服手繪
+  const [twoHeaded, setTwoHeaded] = useState(true) // 預設勾選：人物符合二頭身
   const [textLanguage, setTextLanguage] = useState('zh-TW') // 預設：台灣繁體中文
   const [fontStyle, setFontStyle] = useState('cute') // 預設：可愛 Q 版字型
   const [customFontDesc, setCustomFontDesc] = useState('') // 自訂字型描述
@@ -379,13 +383,14 @@ export default function PromptGenerator() {
     if (faceRealistic) parts.push('臉部用實際照片 寫實 ,不用重新手繪')
     if (clothingHanddrawn) parts.push('服裝可以用手繪')
     const styleNote = parts.length > 0 ? parts.join('，') : ''
+    const twoHeadNote = twoHeaded ? '人物符合二頭身比例（頭身比 2:1），頭大身小。' : ''
     
     let prompt = `✅ 12 格角色貼圖集｜Prompt 建議
 
 請參考上傳圖片中的角色，生成 一張包含 12 個不同動作的角色貼圖集，也不要使用任何emoji表情符號。
 
 [角色與風格設定]
-角色一致性：必須完全維持原圖主角的髮型、服裝、五官與整體外觀特徵。${styleNote}
+角色一致性：必須完全維持原圖主角的髮型、服裝、五官與整體外觀特徵。${styleNote}${twoHeadNote ? ' ' + twoHeadNote : ''}
 構圖風格：畫面僅包含「角色 + 文字」，不包含任何場景背景。
 畫風設定：【${style.style}】${styleNote}
 貼紙風格（去背友善）：角色與文字外圍皆需加入 粗白色外框（Sticker Style）。背景統一為 #00FF00（純綠色），不可有雜點。
@@ -516,6 +521,15 @@ export default function PromptGenerator() {
             />
             <span className="text-sm">{lang === 'zh-TW' ? '衣服手繪' : 'Clothing Hand-drawn'}</span>
           </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={twoHeaded}
+              onChange={(e) => setTwoHeaded(e.target.checked)}
+              className="w-4 h-4 rounded border-[var(--color-border)] text-primary-500 focus:ring-primary-500"
+            />
+            <span className="text-sm">{lang === 'zh-TW' ? '二頭身' : '2-Head Proportion'}</span>
+          </label>
         </div>
         {(faceRealistic || clothingHanddrawn) && (
           <p className="text-xs text-red-500 font-mono bg-red-50 dark:bg-red-900/20 p-2 rounded">
@@ -616,7 +630,7 @@ export default function PromptGenerator() {
         </div>
         <div className="p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
           <div className="text-xs whitespace-pre-wrap font-mono text-[var(--color-text-secondary)] max-h-64 overflow-y-auto">
-            <PromptPreview stickerSet={selectedSet} style={selectedStyle} faceRealistic={faceRealistic} clothingHanddrawn={clothingHanddrawn} textLanguage={textLanguage} fontStyle={fontStyle} customFontDesc={customFontDesc} layoutOption={layoutOption} />
+            <PromptPreview stickerSet={selectedSet} style={selectedStyle} faceRealistic={faceRealistic} clothingHanddrawn={clothingHanddrawn} twoHeaded={twoHeaded} textLanguage={textLanguage} fontStyle={fontStyle} customFontDesc={customFontDesc} layoutOption={layoutOption} />
           </div>
         </div>
       </div>
