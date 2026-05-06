@@ -321,6 +321,13 @@ export default function PromptGenerator() {
     }
   }
 
+  const openInGemini = () => {
+    const prompt = generatePrompt()
+    const encodedPrompt = encodeURIComponent(prompt)
+    const url = `https://gemini.google.com/app?prompt=${encodedPrompt}`
+    window.open(url, '_blank')
+  }
+
   return (
     <div className="card space-y-4">
       <h2 className="text-lg font-semibold flex items-center gap-2">
@@ -406,6 +413,16 @@ export default function PromptGenerator() {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <label className="text-sm font-medium">{lang === 'zh-TW' ? '預覽 Prompt' : 'Prompt Preview'}</label>
+          <button
+            onClick={openInGemini}
+            className="flex items-center gap-1 px-3 py-1.5 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+            title="用 Gemini 生成"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            Gemini
+          </button>
           <button
             onClick={copyPrompt}
             className="flex items-center gap-1 px-3 py-1.5 text-sm bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors"
