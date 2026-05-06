@@ -171,7 +171,26 @@ const STICKER_SETS = {
       { title: '勝利宣言', text: '我打！', action: '指向鏡頭宣布勝利，帥氣背影', effect: '勝利光芒背光' },
       { title: '被打', text: '可惡！', action: '被打單膝跪地咬牙', effect: '憤怒火花' },
       { title: '集氣中', text: 'henshin！', action: '雙手交叉擺出變身姿勢，光芒漸增', effect: '能量匯聚光芒' },
-      { title: '最終型態', text: '最大值！', action: '全身金色光芒爆發，最強姿態', effect: '全域金色光芒' },
+      { title: '最終型態', text: '最大值！', action: '全身金色光芒爆發，最強姿態', effect: '全域金色光芒' }
+    ]
+  },
+  tackle: {
+    label: { 'zh-TW': '⚡ 電波人Tackle', en: '⚡ Electrowave Tackle' },
+    faceStyle: '寫實照片風格不用重新手繪',
+    clothingStyle: '電波人Tackle皮套風格要用金屬質感',
+    stickers: [
+      { title: '變身', text: '變身！', action: '變身腰帶舉起大喊，電波光芒環繞', effect: '閃光環繞全身＋電流爆發' },
+      { title: '電波攻擊', text: '電波！', action: '雙手發射電波能量波', effect: '藍色電流波＋火花' },
+      { title: '電波拳', text: '電波拳！', action: '帶電的騎士拳攻擊', effect: '藍色電流拳影' },
+      { title: '電波踢', text: '電波踢！', action: '空中踢擊帶電波軌跡', effect: '藍色電流踢軌跡' },
+      { title: '準備戰鬥', text: '來吧！', action: '握拳擺出戰鬥姿勢，電流環繞', effect: '電流能量氣場' },
+      { title: '防禦', text: '擋！', action: '單手舉起產生電波護盾', effect: '藍色電波防護罩' },
+      { title: '電波衝擊', text: '衝擊！', action: '全身電流衝撞攻擊', effect: '藍色衝擊波' },
+      { title: '電波迴旋', text: '旋轉！', action: '身體旋轉帶電波攻擊', effect: '藍色旋風電流' },
+      { title: '吃丸子在', text: '好吃！', action: '吃章魚小丸子，嘴巴鼓腮', effect: '蘑菇雲+小丸子在嘴裡' },
+      { title: '勝利', text: '勝利！', action: '指向鏡頭宣布勝利，電流背光', effect: '藍色勝利光芒' },
+      { title: '被打', text: '可惡！', action: '被打單膝跪地咬牙', effect: '憤怒火花' },
+      { title: '最終型態', text: '最大值！', action: '全身藍色電流光芒爆發，最強姿態', effect: '全域藍色電流光芒' }
     ]
   }
 }
