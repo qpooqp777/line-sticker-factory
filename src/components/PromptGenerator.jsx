@@ -290,7 +290,7 @@ export default function PromptGenerator() {
 
     // Add each sticker detail
     data.stickers.forEach((s) => {
-      prompt += `${s.emoji} 【${s.title}】
+      prompt += `【${s.title}】
 文字：${s.text}
 動作：${s.action}
 特效：${s.effect}
