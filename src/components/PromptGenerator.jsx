@@ -192,6 +192,25 @@ const STICKER_SETS = {
       { title: '被打', text: '可惡！', action: '被打單膝跪地咬牙', effect: '憤怒火花' },
       { title: '最終型態', text: '最大值！', action: '全身藍色電流光芒爆發，最強姿態', effect: '全域藍色電流光芒' }
     ]
+  },
+  spider: {
+    label: { 'zh-TW': '🕷️ 蜘蛛男', en: '🕷️ Spider Man' },
+    faceStyle: '寫實照片風格不用重新手繪',
+    clothingStyle: '蜘蛛男皮套風格要有蜘蛛紋路與網絲',
+    stickers: [
+      { title: '蛛網束縛', text: '抓住了！', action: '雙手發射蛛網綑綁對手', effect: '白色蛛網絲線纏繞' },
+      { title: '毒液攻擊', text: '中毒吧！', action: '張口噴射毒液', effect: '紫綠色毒液噴射' },
+      { title: '爬牆尾行', text: '我從上面！', action: '倒掛天花板準備突襲', effect: '陰影籠罩＋蛛絲' },
+      { title: '蛛絲陷阱', text: '踩到沒！', action: '地面佈滿蛛網陷阱', effect: '蛛網地面陷阱光芒' },
+      { title: '蜘蛛崩擊', text: '崩擊！', action: '從上方跳下重腳踩擊', effect: '震動波＋蛛網裂痕' },
+      { title: '八腳連攻', text: '哈！哈！哈！', action: '八隻利爪連續攻擊', effect: '爪痕光芒' },
+      { title: '吸血咬', text: '咬！', action: '張嘴咬向對手脖子', effect: '尖牙光芒＋血滴' },
+      { title: '蛛絲強襲', text: '衝！', action: '全身纏繞蛛絲高速旋轉衝撞', effect: '蛛絲龍捲風' },
+      { title: '吃丸子在', text: '好吃！', action: '吃章魚小丸子，嘴巴鼓腮', effect: '蘑菇雲+小丸子在嘴裡' },
+      { title: '勝利姿勢', text: '吾乃蜘蛛男！', action: '蜘蛛姿勢獰笑勝利', effect: '蛛網背景＋邪惡光芒' },
+      { title: '被打', text: '可惡！', action: '被打倒退咬牙', effect: '憤怒火花' },
+      { title: '蛛王全開', text: '蛛王降臨！', action: '全身巨大蜘蛛能量爆發', effect: '巨大蜘蛛幻影＋蛛網光芒' }
+    ]
   }
 }
 
