@@ -154,6 +154,25 @@ const STICKER_SETS = {
       { emoji: '1️⃣1️⃣', title: '原諒我', text: '原諒我...', action: '跪算盤道歉', effect: '算盤珠' },
       { emoji: '1️⃣2️⃣', title: '啾咪', text: '啾咪💋', action: 'wink加愛心嘴', effect: '發射愛心' }
     ]
+  },
+  kamen: {
+    label: { 'zh-TW': '⚡ 假面騎士', en: '⚡ Kamen Rider' },
+    faceStyle: '寫實照片風格不用重新手繪',
+    clothingStyle: '假面騎士皮套風格要用金屬質感',
+    stickers: [
+      { title: '變身', text: '變身！', action: '變身腰帶舉起大喊「HenShin！」，光芒環繞', effect: '閃光環繞全身＋光芒爆發' },
+      { title: '必殺技', text: '踢！', action: '躍起空中側踢招牌姿勢，腳踢向鏡頭', effect: '火焰踢軌跡＋能量波' },
+      { title: '升級拳', text: 'Finish！', action: '騎士踢後追加升級踢，拳腳並用', effect: '金色衝擊波' },
+      { title: '準備戰鬥', text: '來吧！', action: '握拳舉手擺出戰鬥姿勢，警戒眼神', effect: '戰鬥氣場' },
+      { title: '騎士踢', text: 'Rider Kick！', action: '空中全身旋轉踢，最高威力', effect: '巨大旋風火焰踢' },
+      { title: '拳擊攻擊', text: '喝的！', action: '連續直拳攻擊，拳影重重', effect: '衝擊波拳影' },
+      { title: '防禦架式', text: '少囉嗦！', action: '單手舉起擋住攻擊，霸氣眼神', effect: '防護光盾' },
+      { title: '勝利宣言', text: '我打！', action: '指向鏡頭宣布勝利，帥氣背影', effect: '勝利光芒背光' },
+      { title: '被 разработка', text: '可惡！', action: '被打單膝跪地咬牙', effect: '憤怒火花' },
+      { title: '集氣中', text: 'henshin！', action: '雙手交叉擺出變身姿勢，光芒漸增', effect: '能量匯聚光芒' },
+      { title: '招牌動作', text: '土味情話', action: '單手叉腰歪頭手指比1，經典姿勢', effect: '帥氣背光' },
+      { title: '最終型態', text: '最大值！', action: '全身金色光芒爆發，最強姿態', effect: '全域金色光芒' },
+    ]
   }
 }
 
