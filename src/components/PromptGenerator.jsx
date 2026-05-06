@@ -147,19 +147,17 @@ const STYLES = {
 }
 
 // Preview component with highlighted dynamic parts
-function PromptPreview({ stickerSet, style }) {
+function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn }) {
   const data = STICKER_SETS[stickerSet]
   const styleData = STYLES[style]
 
-  const renderHighlighted = (text) => {
-    const parts = text.split(/(\[.*?\])/g)
-    return parts.map((part, i) => {
-      if (part.startsWith('[') && part.endsWith(']')) {
-        return <mark key={i} className="text-red-500 font-bold text-base bg-transparent">{part}</mark>
-      }
-      return part
-    })
-  }
+  // Build style note text based on checkboxes
+  const styleNote = (() => {
+    const parts = []
+    if (faceRealistic) parts.push('臉部用實際照片 寫實 ,不用重新手繪')
+    if (clothingHanddrawn) parts.push('服裝可以用手繪')
+    return parts.length > 0 ? parts.join('，') : null
+  })()
 
   return (
     <>
@@ -174,12 +172,12 @@ function PromptPreview({ stickerSet, style }) {
       <span className="text-neutral-500">[角色與風格設定]</span>
       {'\n'}
       <span className="text-neutral-600 dark:text-neutral-400">角色一致性：必須完全維持原圖主角的髮型、服裝、五官與整體外觀特徵。</span>
-      <mark className="text-red-500 font-bold text-base bg-transparent">臉部用實際照片 寫實 ,不用重新手繪,服裝可以用手繪</mark>
+      {styleNote && <mark className="text-red-500 font-bold text-base bg-transparent">{styleNote}</mark>}
       {'\n'}
       <span className="text-neutral-600 dark:text-neutral-400">構圖風格：畫面僅包含「角色 + 文字」，不包含任何場景背景。</span>
       {'\n'}
       <span className="text-neutral-600 dark:text-neutral-400">畫風設定：【<mark className="text-red-500 font-bold text-base bg-transparent">{styleData.style}</mark>】。</span>
-      <mark className="text-red-500 font-bold text-base bg-transparent">臉部用實際照片 寫實 ,不用重新手繪,服裝可以用手繪</mark>
+      {styleNote && <mark className="text-red-500 font-bold text-base bg-transparent">{styleNote}</mark>}
       {'\n'}
       <span className="text-neutral-600 dark:text-neutral-400">貼紙風格（去背友善）：角色與文字外圍皆需加入 粗白色外框（Sticker Style）。背景統一為 #00FF00（純綠色），不可有雜點。</span>
       {'\n'}
@@ -222,19 +220,27 @@ export default function PromptGenerator() {
   const [selectedSet, setSelectedSet] = useState('knight')
   const [selectedStyle, setSelectedStyle] = useState('cute')
   const [copied, setCopied] = useState(false)
+  const [faceRealistic, setFaceRealistic] = useState(true) // 預設勾選：頭像用寫實
+  const [clothingHanddrawn, setClothingHanddrawn] = useState(true) // 預設勾選：衣服手繪
 
   const generatePrompt = () => {
     const data = STICKER_SETS[selectedSet]
     const style = STYLES[selectedStyle]
+    
+    // Build style note text
+    const parts = []
+    if (faceRealistic) parts.push('臉部用實際照片 寫實 ,不用重新手繪')
+    if (clothingHanddrawn) parts.push('服裝可以用手繪')
+    const styleNote = parts.length > 0 ? parts.join('，') : ''
     
     let prompt = `✅ 12 格角色貼圖集｜Prompt 建議
 
 請參考上傳圖片中的角色，生成 一張包含 12 個不同動作的角色貼圖集，也不要使用任何emoji表情符號。
 
 [角色與風格設定]
-角色一致性：必須完全維持原圖主角的髮型、服裝、五官與整體外觀特徵。臉部用實際照片 寫實 ,不用重新手繪,服裝可以用手繪
+角色一致性：必須完全維持原圖主角的髮型、服裝、五官與整體外觀特徵。${styleNote}
 構圖風格：畫面僅包含「角色 + 文字」，不包含任何場景背景。
-畫風設定：【${style.style}】。臉部用實際照片 寫實 ,不用重新手繪,服裝可以用手繪
+畫風設定：【${style.style}】${styleNote}
 貼紙風格（去背友善）：角色與文字外圍皆需加入 粗白色外框（Sticker Style）。背景統一為 #00FF00（純綠色），不可有雜點。
 
 [畫面佈局與尺寸規格]
@@ -328,6 +334,36 @@ export default function PromptGenerator() {
         </div>
       </div>
 
+      {/* Face/Clothing Style Options */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">{lang === 'zh-TW' ? '風格備註（選填）' : 'Style Notes (Optional)'}</label>
+        <div className="flex flex-wrap gap-4">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={faceRealistic}
+              onChange={(e) => setFaceRealistic(e.target.checked)}
+              className="w-4 h-4 rounded border-[var(--color-border)] text-primary-500 focus:ring-primary-500"
+            />
+            <span className="text-sm">{lang === 'zh-TW' ? '頭像用寫實' : 'Face Realistic'}</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={clothingHanddrawn}
+              onChange={(e) => setClothingHanddrawn(e.target.checked)}
+              className="w-4 h-4 rounded border-[var(--color-border)] text-primary-500 focus:ring-primary-500"
+            />
+            <span className="text-sm">{lang === 'zh-TW' ? '衣服手繪' : 'Clothing Hand-drawn'}</span>
+          </label>
+        </div>
+        {(faceRealistic || clothingHanddrawn) && (
+          <p className="text-xs text-red-500 font-mono bg-red-50 dark:bg-red-900/20 p-2 rounded">
+            → {faceRealistic ? '臉部用實際照片 寫實 ,不用重新手繪' : ''}{faceRealistic && clothingHanddrawn ? '，' : ''}{clothingHanddrawn ? '服裝可以用手繪' : ''}
+          </p>
+        )}
+      </div>
+
       {/* Generated Prompt Preview */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
@@ -355,7 +391,7 @@ export default function PromptGenerator() {
         </div>
         <div className="p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
           <div className="text-xs whitespace-pre-wrap font-mono text-[var(--color-text-secondary)] max-h-64 overflow-y-auto">
-            <PromptPreview stickerSet={selectedSet} style={selectedStyle} />
+            <PromptPreview stickerSet={selectedSet} style={selectedStyle} faceRealistic={faceRealistic} clothingHanddrawn={clothingHanddrawn} />
           </div>
         </div>
       </div>
