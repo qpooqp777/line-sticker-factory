@@ -1,16 +1,56 @@
-# React + Vite
+# LINE 貼圖工廠
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+將一張 4x3 網格圖自動切分為 12 張 LINE 貼圖的線上工具。
 
-Currently, two official plugins are available:
+## 功能特色
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- 📤 自動去背：支援白色、綠色、黑色背景一鍵去背
+- ✂️ 智慧切分：自動將 4x3 網格圖（2560×1664px）切為 12 張獨立貼圖
+- 🖼️ 預覽下載：即時預覽效果並支援 ZIP 打包下載
+- 🌐 多語言：支援繁體中文 / English 切換
+- 🌙 主題切換：淺色/深色模式
 
-## React Compiler
+## 支援的貼圖主題
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| 主題 | 說明 |
+|------|------|
+| ⚔️ 騎士戰鬥 | 戰鬥風格角色貼圖 |
+| 💬 日常用語 | 常用對話回應 |
+| 👋 打招呼 | 問候語系列 |
+| 🎭 迷因搞笑 | 迷因梗圖風格 |
+| 🎀 節日祝福 | 節日主題貼圖 |
+| 💫 回應篇 | 萬用回應貼圖 |
+| 💼 上班日常 | 工作相關貼圖 |
+| 💕 老公老婆 | 情侶貼圖 |
 
-## Expanding the ESLint configuration
+## 畫風選項
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Q 版風格
+- 寫實風格
+- 3D 渲染
+- 手繪風格
+- 像素風格
+- 日系動漫
+
+## 技術栈
+
+- React + Vite
+- Tailwind CSS
+- Web Worker（客戶端去背）
+
+## 安裝與執行
+
+```bash
+# 安裝依賴
+npm install
+
+# 開發模式
+npm run dev
+
+# 建置 production
+npm run build
+```
+
+## 參考網站
+
+灵感来源：[LINE Sticker Factory](https://meikochang.github.io/line-sticker-factory/)
