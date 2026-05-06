@@ -32,14 +32,16 @@ export default function GridSlicer({ gridImage, onStickersReady, removeBg, stick
   }
 
   // AI-powered background removal using @imgly/background-removal
-  const removeBackgroundAI = async (canvas) => {
+  const removeBackgroundAI = async (canvas, stickerIndex) => {
     const blob = await new Promise((resolve) => {
       canvas.toBlob(resolve, 'image/png')
     })
 
     try {
+      setModelDownloading(true)
       const resultBlob = await removeBackground(blob, {
         progress: (key, current, total) => {
+          console.log(`[AI去背] ${key}: ${current}/${total}`)
           if (key === 'fetch-model' || key.startsWith('download')) {
             setModelDownloading(true)
             const pct = Math.round((current / total) * 100)
@@ -54,13 +56,59 @@ export default function GridSlicer({ gridImage, onStickersReady, removeBg, stick
       })
       
       setModelDownloading(false)
+      console.log(`[AI去背] 第${stickerIndex}張完成`)
       return await blobToDataURL(resultBlob)
     } catch (error) {
-      console.error('Background removal error:', error)
+      console.error(`[AI去背] 第${stickerIndex}張失敗:`, error)
       setModelDownloading(false)
-      // Fallback to original if AI removal fails
-      return canvas.toDataURL('image/png')
+      // Fallback: simple threshold-based removal
+      return applySimpleBgRemoval(canvas)
     }
+  }
+
+  // Simple fallback background removal (threshold-based)
+  const applySimpleBgRemoval = (canvas) => {
+    const ctx = canvas.getContext('2d')
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    const data = imgData.data
+    
+    // Sample corners to detect background color
+    const corners = [
+      data.slice(0, 4),
+      data.slice((canvas.width * 4) * (canvas.height - 1), (canvas.width * 4) * (canvas.height - 1) + 4),
+      data.slice((canvas.width - 1) * 4, (canvas.width - 1) * 4 + 4),
+      data.slice((canvas.width * (canvas.height - 1) + canvas.width - 1) * 4, (canvas.width * (canvas.height - 1) + canvas.width - 1) * 4 + 4),
+    ]
+    
+    // Average corner color
+    let avgR = 0, avgG = 0, avgB = 0
+    corners.forEach(c => {
+      avgR += c[0]
+      avgG += c[1]
+      avgB += c[2]
+    })
+    avgR = Math.round(avgR / 4)
+    avgG = Math.round(avgG / 4)
+    avgB = Math.round(avgB / 4)
+    
+    console.log(`[簡單去背] 偵測背景色: RGB(${avgR},${avgG},${avgB})`)
+    
+    // Replace pixels close to background color with transparent
+    const threshold = 60
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i]
+      const g = data[i + 1]
+      const b = data[i + 2]
+      
+      const diff = Math.abs(r - avgR) + Math.abs(g - avgG) + Math.abs(b - avgB)
+      if (diff < threshold) {
+        data[i + 3] = 0 // transparent
+      }
+    }
+    
+    ctx.putImageData(imgData, 0, 0)
+    console.log(`[簡單去背] 完成`)
+    return canvas.toDataURL('image/png')
   }
 
   const sliceImage = useCallback(async () => {
@@ -105,11 +153,7 @@ export default function GridSlicer({ gridImage, onStickersReady, removeBg, stick
         // Remove background if enabled (AI-powered)
         let imageData = canvas.toDataURL('image/png')
         if (removeBg) {
-          if (modelDownloading) {
-            // Skip if model is still downloading
-          } else {
-            imageData = await removeBackgroundAI(canvas)
-          }
+          imageData = await removeBackgroundAI(canvas, index)
         }
 
         slicedStickers.push({
