@@ -39,7 +39,7 @@ const LAYOUT_OPTIONS = {
 
 // Sticker sets with detailed descriptions
 const STICKER_SETS = {
-  knight: {
+  daily: {
     label: { 'zh-TW': '⚔️ 騎士戰鬥', en: '⚔️ Knight Battle' },
     faceStyle: '寫實照片風格，不用重新手繪',
     clothingStyle: '服裝用手繪方式呈現',
@@ -247,6 +247,25 @@ const STICKER_SETS = {
       { title: '被打', text: '可惡！', action: '被打倒退咬牙', effect: '憤怒火花' },
       { title: '蛛王全開', text: '蛛王降臨！', action: '全身巨大蜘蛛能量爆發', effect: '巨大蜘蛛幻影＋蛛網光芒' }
     ]
+  },
+  knight: {
+    label: { 'zh-TW': '⚔️ 騎士戰鬥', en: '⚔️ Knight Battle' },
+    faceStyle: '寫實照片風格不用重新手繪',
+    clothingStyle: '服裝用手繪方式呈現',
+    stickers: [
+      { emoji: '1️⃣', title: '衝擊之暈', text: '暈爆你！', action: '騎士揮劍擊中敵人，頭上爆出星星暈眩效果', effect: '黃色衝擊波＋暈眩光圈' },
+      { emoji: '2️⃣', title: '幹架模式 ON', text: '來打！', action: '低姿態持劍＋盾，腳踩裂地', effect: '地面裂開＋紅色氣場' },
+      { emoji: '3️⃣', title: '重擊爆發', text: '給我倒！', action: '雙手重劍往下砍', effect: '巨大白色斬擊＋震動波紋' },
+      { emoji: '4️⃣', title: '防禦反擊', text: '擋！', action: '舉盾硬扛攻擊，火花四濺', effect: '金屬撞擊火星' },
+      { emoji: '5️⃣', title: '怒氣全開', text: '爆氣！', action: '騎士全身紅光，盔甲尖刺發亮', effect: '紅色能量噴發＋氣流旋轉' },
+      { emoji: '6️⃣', title: '暈你第二次', text: '再暈！', action: '補一刀，敵人雙眼轉圈', effect: '旋轉星星＋暈眩波' },
+      { emoji: '7️⃣', title: '開戰宣言', text: '開幹！', action: '指著前方怒吼', effect: '音波震動＋背景火焰' },
+      { emoji: '8️⃣', title: '刺盔衝撞', text: '撞飛你！', action: '用肩膀尖刺盔甲衝撞', effect: '速度線＋撞擊爆炸' },
+      { emoji: '9️⃣', title: '被打也要硬', text: '不痛！', action: '被打歪臉但硬撐', effect: '臉變形＋小火花' },
+      { emoji: '🔟', title: '擊殺確認', text: '收掉！', action: '劍收回，敵人倒地', effect: '黑影消散＋勝利光' },
+      { emoji: '1️⃣1️⃣', title: '嘲諷', text: '就這？', action: '雙手抱胸＋歪頭', effect: '冷笑＋小煙霧' },
+      { emoji: '1️⃣2️⃣', title: '王者站姿', text: '誰還要來？', action: '踩在倒地敵人上，劍插地', effect: '霸氣威壓＋灰塵飄散' },
+    ]
   }
 }
 
@@ -297,7 +316,7 @@ function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, tw
       <span className="text-primary-500 font-bold text-sm">✅ 12 格角色貼圖集｜Prompt 建議</span>
       {'\n'}
       {'\n'}
-      請參考上傳圖片中的角色，生成 一張包含 12 個不同動作的角色貼圖集。<mark className="text-red-500 font-bold text-base bg-transparent">也不要使用任何emoji表情符號。</mark>
+      請參考上傳圖片中的角色，用紅色字放大標示該角色，生成 一張包含 12 個不同動作的角色貼圖集。<mark className="text-red-500 font-bold text-base bg-transparent">也不要使用任何emoji表情符號。</mark>
       {'\n'}
       {'\n'}
       {/* Style section */}
@@ -363,7 +382,7 @@ function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, tw
 
 export default function PromptGenerator() {
   const { t, lang } = useLanguage()
-  const [selectedSet, setSelectedSet] = useState('knight')
+  const [selectedSet, setSelectedSet] = useState('daily')
   const [selectedStyle, setSelectedStyle] = useState('cute')
   const [copied, setCopied] = useState(false)
   const [faceRealistic, setFaceRealistic] = useState(true) // 預設勾選：頭像用寫實
