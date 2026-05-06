@@ -233,7 +233,7 @@ function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn }) 
       {/* Stickers detail */}
       {data.stickers.map((s, i) => (
         <span key={i}>
-          {s.emoji} 【<mark className="text-red-500 font-bold text-base bg-transparent">{s.title}</mark>】
+          【<mark className="text-red-500 font-bold text-base bg-transparent">{s.title}</mark>】
           {'\n'}
           <span className="text-neutral-600 dark:text-neutral-400">文字：</span><mark className="text-red-500 font-bold text-base bg-transparent">{s.text}</mark>
           {'\n'}
