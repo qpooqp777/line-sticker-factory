@@ -1,6 +1,14 @@
 import { useState } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 
+// Text language options for prompt output
+const TEXT_LANGUAGES = {
+  'zh-TW': '台灣繁體中文',
+  'zh-CN': '簡體中文',
+  'ja': '日文',
+  'en': '英文'
+}
+
 // Sticker sets with detailed descriptions
 const STICKER_SETS = {
   knight: {
@@ -242,7 +250,7 @@ const STYLES = {
 }
 
 // Preview component with highlighted dynamic parts
-function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn }) {
+function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, textLanguage }) {
   const data = STICKER_SETS[stickerSet]
   const styleData = STYLES[style]
 
@@ -287,6 +295,14 @@ function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn }) 
       <span className="text-neutral-600 dark:text-neutral-400">鏡頭多樣化：全身 + 半身混合，必須包含正面、側面、俯角等不同視角。</span>
       {'\n'}
       {'\n'}
+      {/* Text design section */}
+      <span className="text-neutral-500">[文字設計]</span>
+      {'\n'}
+      <span className="text-neutral-600 dark:text-neutral-400">語言：【<mark className="text-red-500 font-bold text-base bg-transparent">{TEXT_LANGUAGES[textLanguage]}</mark>】</span>
+      {'\n'}
+      <span className="text-neutral-600 dark:text-neutral-400">文字內容請使用{TEXT_LANGUAGES[textLanguage]}書寫，包含每張貼圖上的文字與標題。</span>
+      {'\n'}
+      {'\n'}
       {/* Stickers detail */}
       {data.stickers.map((s, i) => (
         <span key={i}>
@@ -317,6 +333,7 @@ export default function PromptGenerator() {
   const [copied, setCopied] = useState(false)
   const [faceRealistic, setFaceRealistic] = useState(true) // 預設勾選：頭像用寫實
   const [clothingHanddrawn, setClothingHanddrawn] = useState(true) // 預設勾選：衣服手繪
+  const [textLanguage, setTextLanguage] = useState('zh-TW') // 預設：台灣繁體中文
 
   const generatePrompt = () => {
     const data = STICKER_SETS[selectedSet]
@@ -342,6 +359,10 @@ export default function PromptGenerator() {
 整體為 4 × 3 佈局，共 12 張貼圖。總尺寸：2560×1664 px。
 每張小圖約 370 × 320 px（自動等比縮放填滿排列）。每張貼圖四周預留約 0.2 cm Padding，避免畫面互相黏住。
 鏡頭多樣化：全身 + 半身混合，必須包含正面、側面、俯角等不同視角。
+
+[文字設計]
+語言：【${TEXT_LANGUAGES[textLanguage]}】
+文字內容請使用${TEXT_LANGUAGES[textLanguage]}書寫，包含每張貼圖上的文字與標題。
 
 `
 
@@ -464,6 +485,20 @@ export default function PromptGenerator() {
             → {faceRealistic ? '臉部用實際照片 寫實 ,不用重新手繪' : ''}{faceRealistic && clothingHanddrawn ? '，' : ''}{clothingHanddrawn ? '服裝可以用手繪' : ''}
           </p>
         )}
+
+        {/* Language selector for text design */}
+        <div className="flex flex-wrap items-center gap-2 mt-2">
+          <span className="text-sm font-medium">{lang === 'zh-TW' ? '文字語言：' : 'Text Language:'}</span>
+          <select
+            value={textLanguage}
+            onChange={(e) => setTextLanguage(e.target.value)}
+            className="px-3 py-1.5 rounded border border-[var(--color-border)] bg-[var(--color-bg)] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+            {Object.entries(TEXT_LANGUAGES).map(([key, label]) => (
+              <option key={key} value={key}>{label}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Generated Prompt Preview */}
@@ -503,7 +538,7 @@ export default function PromptGenerator() {
         </div>
         <div className="p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
           <div className="text-xs whitespace-pre-wrap font-mono text-[var(--color-text-secondary)] max-h-64 overflow-y-auto">
-            <PromptPreview stickerSet={selectedSet} style={selectedStyle} faceRealistic={faceRealistic} clothingHanddrawn={clothingHanddrawn} />
+            <PromptPreview stickerSet={selectedSet} style={selectedStyle} faceRealistic={faceRealistic} clothingHanddrawn={clothingHanddrawn} textLanguage={textLanguage} />
           </div>
         </div>
       </div>
