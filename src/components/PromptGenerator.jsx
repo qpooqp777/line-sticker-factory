@@ -9,6 +9,34 @@ const TEXT_LANGUAGES = {
   'en': '英文'
 }
 
+// Font style options
+const FONT_STYLES = {
+  cute: {
+    label: { 'zh-TW': '可愛 Q 版', en: 'Cute Q-style' },
+    desc: '可愛 Q 版字型，顏色鮮豔、易讀，多色彩混合，絕對禁止使用任何綠色（包含深綠、淺綠、螢光綠、藍綠）與黑色，因為會導致去背錯誤。請改用紅、藍、紫、橘、黃等高對比色彩。'
+  },
+  simple: {
+    label: { 'zh-TW': '簡潔白字', en: 'Simple White' },
+    desc: '簡潔白色粗體字，帶黑色描邊，清晰易讀。'
+  },
+  custom: {
+    label: { 'zh-TW': '自訂', en: 'Custom' },
+    desc: '' // 使用者自行輸入
+  }
+}
+
+// Layout options
+const LAYOUT_OPTIONS = {
+  standard: {
+    label: { 'zh-TW': '標準排版', en: 'Standard' },
+    desc: '文字大小約佔單張貼圖 1/3，文字可適度壓在衣服邊角等非重要區域，不能遮臉，也不要使用任何emoji表情符號。'
+  },
+  compact: {
+    label: { 'zh-TW': '緊湊排版', en: 'Compact' },
+    desc: '文字較小，約佔單張貼圖 1/4，適合動作較大的貼圖。'
+  }
+}
+
 // Sticker sets with detailed descriptions
 const STICKER_SETS = {
   knight: {
@@ -250,7 +278,7 @@ const STYLES = {
 }
 
 // Preview component with highlighted dynamic parts
-function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, textLanguage }) {
+function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, textLanguage, fontStyle, customFontDesc, layoutOption }) {
   const data = STICKER_SETS[stickerSet]
   const styleData = STYLES[style]
 
@@ -302,6 +330,10 @@ function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, te
       {'\n'}
       <span className="text-neutral-600 dark:text-neutral-400">文字內容請使用{TEXT_LANGUAGES[textLanguage]}書寫，包含每張貼圖上的文字與標題。</span>
       {'\n'}
+      <span className="text-neutral-600 dark:text-neutral-400">字型風格：【<mark className="text-red-500 font-bold text-base bg-transparent">{fontStyle === 'custom' ? customFontDesc : FONT_STYLES[fontStyle].desc}</mark>】</span>
+      {'\n'}
+      <span className="text-neutral-600 dark:text-neutral-400">排版：【<mark className="text-red-500 font-bold text-base bg-transparent">{LAYOUT_OPTIONS[layoutOption].desc}</mark>】</span>
+      {'\n'}
       {'\n'}
       {/* Stickers detail */}
       {data.stickers.map((s, i) => (
@@ -334,6 +366,9 @@ export default function PromptGenerator() {
   const [faceRealistic, setFaceRealistic] = useState(true) // 預設勾選：頭像用寫實
   const [clothingHanddrawn, setClothingHanddrawn] = useState(true) // 預設勾選：衣服手繪
   const [textLanguage, setTextLanguage] = useState('zh-TW') // 預設：台灣繁體中文
+  const [fontStyle, setFontStyle] = useState('cute') // 預設：可愛 Q 版字型
+  const [customFontDesc, setCustomFontDesc] = useState('') // 自訂字型描述
+  const [layoutOption, setLayoutOption] = useState('standard') // 預設：標準排版
 
   const generatePrompt = () => {
     const data = STICKER_SETS[selectedSet]
@@ -363,6 +398,8 @@ export default function PromptGenerator() {
 [文字設計]
 語言：【${TEXT_LANGUAGES[textLanguage]}】
 文字內容請使用${TEXT_LANGUAGES[textLanguage]}書寫，包含每張貼圖上的文字與標題。
+字型風格：【${fontStyle === 'custom' ? customFontDesc : FONT_STYLES[fontStyle].desc}】
+排版：【${LAYOUT_OPTIONS[layoutOption].desc}】
 
 `
 
@@ -499,6 +536,47 @@ export default function PromptGenerator() {
             ))}
           </select>
         </div>
+
+        {/* Font style selector */}
+        <div className="flex flex-wrap items-center gap-2 mt-2">
+          <span className="text-sm font-medium">{lang === 'zh-TW' ? '字型風格：' : 'Font Style:'}</span>
+          <select
+            value={fontStyle}
+            onChange={(e) => setFontStyle(e.target.value)}
+            className="px-3 py-1.5 rounded border border-[var(--color-border)] bg-[var(--color-bg)] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+            {Object.entries(FONT_STYLES).map(([key, val]) => (
+              <option key={key} value={key}>{val.label['zh-TW']}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Custom font description input */}
+        {fontStyle === 'custom' && (
+          <div className="mt-2">
+            <textarea
+              value={customFontDesc}
+              onChange={(e) => setCustomFontDesc(e.target.value)}
+              placeholder={lang === 'zh-TW' ? '輸入自訂字型描述...' : 'Enter custom font description...'}
+              className="w-full px-3 py-2 rounded border border-[var(--color-border)] bg-[var(--color-bg)] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
+              rows={2}
+            />
+          </div>
+        )}
+
+        {/* Layout selector */}
+        <div className="flex flex-wrap items-center gap-2 mt-2">
+          <span className="text-sm font-medium">{lang === 'zh-TW' ? '排版：' : 'Layout:'}</span>
+          <select
+            value={layoutOption}
+            onChange={(e) => setLayoutOption(e.target.value)}
+            className="px-3 py-1.5 rounded border border-[var(--color-border)] bg-[var(--color-bg)] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+            {Object.entries(LAYOUT_OPTIONS).map(([key, val]) => (
+              <option key={key} value={key}>{val.label['zh-TW']}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Generated Prompt Preview */}
@@ -538,7 +616,7 @@ export default function PromptGenerator() {
         </div>
         <div className="p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
           <div className="text-xs whitespace-pre-wrap font-mono text-[var(--color-text-secondary)] max-h-64 overflow-y-auto">
-            <PromptPreview stickerSet={selectedSet} style={selectedStyle} faceRealistic={faceRealistic} clothingHanddrawn={clothingHanddrawn} textLanguage={textLanguage} />
+            <PromptPreview stickerSet={selectedSet} style={selectedStyle} faceRealistic={faceRealistic} clothingHanddrawn={clothingHanddrawn} textLanguage={textLanguage} fontStyle={fontStyle} customFontDesc={customFontDesc} layoutOption={layoutOption} />
           </div>
         </div>
       </div>
