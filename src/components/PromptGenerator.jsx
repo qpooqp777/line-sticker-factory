@@ -332,7 +332,7 @@ const STICKER_SETS = {
       { title: '裝酷', text: '酷吧', action: '戴墨鏡歪頭', effect: '帥氣光線' },
       { title: '震驚臉', text: '震驚！', action: '嘴巴張大到極限', effect: '閃電劈下' },
       { title: '不屑', text: '哼', action: '歪嘴不屑', effect: '冷笑氣場' },
-      { title: '裝死', text: '我死了', action: '倒地裝死', effect: '靈魂飄走' },
+      { title: '攤手無奈', text: '隨便啦', action: '雙手攤開聳肩', effect: '無奈符號' },
       { title: '想太多', text: '想太多', action: '托腮思考過度', effect: '思考漩渦' },
       { title: '不想面對', text: '不要！', action: '矇住眼睛', effect: '拒絕結界' },
       { title: '吃瓜群眾', text: '看熱鬧', action: '拿瓜子看戲', effect: '八卦光芒' },
