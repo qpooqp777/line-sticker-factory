@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
 import Header from './components/Header'
@@ -8,6 +8,7 @@ import GridSlicer from './components/GridSlicer'
 import StickerSelector from './components/StickerSelector'
 import FileNaming from './components/FileNaming'
 import DownloadPanel from './components/DownloadPanel'
+import Snackbar from './components/Snackbar'
 
 function AppContent() {
   // Refs
@@ -20,6 +21,13 @@ function AppContent() {
   const [tabSticker, setTabSticker] = useState(null)
   const [startNumber, setStartNumber] = useState(1)
   const [removeBg, setRemoveBg] = useState(true)
+
+  // Snackbar state
+  const [snackbar, setSnackbar] = useState(null)
+  const showSnackbar = useCallback((message, type = 'success') => {
+    setSnackbar({ message, type })
+  }, [])
+  const hideSnackbar = useCallback(() => setSnackbar(null), [])
 
   // Handlers
   const handleGridImageLoaded = (image) => {
@@ -84,15 +92,18 @@ function AppContent() {
               onStartNumberChange={setStartNumber}
             />
             
-            <DownloadPanel 
+            <DownloadPanel
               stickers={stickers}
               mainSticker={mainSticker}
               tabSticker={tabSticker}
               startNumber={startNumber}
+              onSnackbar={showSnackbar}
             />
           </div>
         </div>
       </main>
+
+      {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={hideSnackbar} />}
       
       {/* Floating buttons for mobile - quick scroll */}
       <div className="lg:hidden fixed bottom-6 right-6 flex flex-col gap-3 z-50">

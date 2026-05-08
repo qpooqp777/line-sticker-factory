@@ -26,6 +26,24 @@ const FONT_STYLES = {
 }
 
 // Layout options
+const SIZE_OPTIONS = {
+  '1480x960': {
+    label: { 'zh-TW': '1480×960 px', en: '1480×960 px' },
+    desc: '1480 × 960 px',
+    cell: '370 × 240 px',
+  },
+  '1200x896': {
+    label: { 'zh-TW': '1200×896 px', en: '1200×896 px' },
+    desc: '1200×896 px',
+    cell: '~300 × 224 px',
+  },
+  '2560x1664': {
+    label: { 'zh-TW': '2560×1664 px', en: '2560×1664 px' },
+    desc: '2560×1664 px',
+    cell: '~640 × 416 px',
+  },
+}
+
 const LAYOUT_OPTIONS = {
   standard: {
     label: { 'zh-TW': '標準排版', en: 'Standard' },
@@ -248,6 +266,44 @@ const STICKER_SETS = {
       { title: '蛛王全開', text: '蛛王降臨！', action: '全身巨大蜘蛛能量爆發', effect: '巨大蜘蛛幻影＋蛛網光芒' }
     ]
   },
+  ultraman1: {
+    label: { 'zh-TW': '🦸 鹹蛋超人1', en: '🦸 Ultraman 1' },
+    faceStyle: '寫實照片風格不用重新手繪',
+    clothingStyle: '鹹蛋超人皮套風格要有金屬質感與發光線條',
+    stickers: [
+      { title: '斯派修姆光線', text: '看招！', action: '雙手呈十字交叉狀，發射光線', effect: '金色光線射向敵人＋能量波' },
+      { title: '斯派修姆光線', text: '發射！', action: '雙手呈十字交叉狀，發射光線', effect: '金色光線射向敵人＋能量波' },
+      { title: '斯派修姆光線', text: '正義必勝', action: '雙手呈十字交叉狀，勝利姿勢', effect: '金色光線＋勝利光芒' },
+      { title: '能量指示燈閃爍', text: '我沒電了', action: '胸口圓燈變紅閃爍，表示時間不足', effect: '紅色閃爍警示燈' },
+      { title: '能量指示燈閃爍', text: '時間不夠', action: '胸口圓燈變紅閃爍，表示時間不足', effect: '紅色閃爍警示燈' },
+      { title: '能量指示燈閃爍', text: '撤退', action: '胸口圓燈變紅閃爍，表示時間不足', effect: '紅色閃爍警示燈' },
+      { title: '能量指示燈閃爍', text: '快救我', action: '胸口圓燈變紅閃爍，求助姿勢', effect: '紅色閃爍警示燈＋求助光芒' },
+      { title: '變身動作', text: '交給我吧！', action: '單手舉起變身器', effect: '變身光芒環繞' },
+      { title: '變身動作', text: '變身！', action: '單手舉起變身器，變身特效', effect: '閃光環繞全身＋光芒爆發' },
+      { title: '變身動作', text: '我來了', action: '單手舉起變身器', effect: '變身光芒環繞' },
+      { title: '防禦姿勢', text: '拒絕', action: '雙手張開擋在身前', effect: '防護光盾' },
+      { title: '防禦姿勢', text: '沒問題', action: '雙手張開擋在身前，自信表情', effect: '防護光盾＋自信光芒' },
+    ]
+  },
+  ultraman2: {
+    label: { 'zh-TW': '🦸 鹹蛋超人2', en: '🦸 Ultraman 2' },
+    faceStyle: '寫實照片風格不用重新手繪',
+    clothingStyle: '鹹蛋超人皮套風格要有金屬質感與發光線條',
+    stickers: [
+      { title: '防禦姿勢', text: '包在我身上', action: '雙手張開擋在身前，自信表情', effect: '防護光盾＋自信光芒' },
+      { title: '飛行姿勢', text: '衝啊！', action: '單手向前伸直，身體俯衝', effect: '飛行軌跡＋速度線' },
+      { title: '飛行姿勢', text: '趕路中', action: '雙手向前伸直，身體俯衝', effect: '飛行軌跡＋速度線' },
+      { title: '飛行姿勢', text: '我飛過去', action: '單手向前伸直，身體俯衝', effect: '飛行軌跡＋速度線' },
+      { title: 'OK', text: '收到', action: '超人豎起大拇指', effect: '勝利光芒' },
+      { title: 'OK', text: 'OK', action: '超人豎起大拇指', effect: '勝利光芒' },
+      { title: '辛苦了', text: '辛苦了', action: '與怪獸握手或點頭示意', effect: '友情光芒' },
+      { title: '抱歉', text: '抱歉', action: '超人或怪獸低頭鞠躬', effect: '歉意光芒' },
+      { title: '想睡', text: '想睡', action: '怪獸（如皮古蒙）蓋被子睡覺', effect: 'ZZZ＋月亮' },
+      { title: '晚安', text: '晚安', action: '怪獸蓋被子睡覺，月亮背景', effect: 'ZZZ＋月亮＋星星' },
+      { title: '早安', text: '早安', action: '超人迎接太陽', effect: '太陽光芒' },
+      { title: '加油', text: '加油', action: '超人握拳鼓勵', effect: '火焰鬥志' },
+    ]
+  },
   knight: {
     label: { 'zh-TW': '⚔️ 騎士戰鬥', en: '⚔️ Knight Battle' },
     faceStyle: '寫實照片風格不用重新手繪',
@@ -297,7 +353,7 @@ const STYLES = {
 }
 
 // Preview component with highlighted dynamic parts
-function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, twoHeaded, textLanguage, fontStyle, customFontDesc, layoutOption }) {
+function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, twoHeaded, textLanguage, fontStyle, customFontDesc, layoutOption, sizeOption }) {
   const data = STICKER_SETS[stickerSet]
   const styleData = STYLES[style]
 
@@ -332,15 +388,15 @@ function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, tw
       {styleNote && <mark className="text-red-500 font-bold text-base bg-transparent">{styleNote}</mark>}
       {twoHeadNote && <><span> </span><mark className="text-red-500 font-bold text-base bg-transparent">{twoHeadNote}</mark></>}
       {'\n'}
-      <span className="text-neutral-600 dark:text-neutral-400">貼紙風格（去背友善）：角色與文字外圍皆需加入 粗白色外框（Sticker Style）。背景統一為 #00FF00（純綠色），不可有雜點。</span>
+      <span className="text-neutral-600 dark:text-neutral-400">貼紙風格（去背友善）：角色與文字外圍皆需加入 粗白色外框（Sticker Style）。背景統一為 #00FF00（純綠色），不可有雜點。特效勿使用文字顯示（使用手繪製圖案）。</span>
       {'\n'}
       {'\n'}
       {/* Layout section */}
       <span className="text-neutral-500">[畫面佈局與尺寸規格]</span>
       {'\n'}
-      <span className="text-neutral-600 dark:text-neutral-400">整體為 4 × 3 佈局，共 12 張貼圖。總尺寸：2560×1664 px。</span>
+      <span className="text-neutral-600 dark:text-neutral-400">整體為 4 × 3 佈局，共 12 張貼圖。總尺寸：{SIZE_OPTIONS[sizeOption].desc}。</span>
       {'\n'}
-      <span className="text-neutral-600 dark:text-neutral-400">每張小圖約 370 × 320 px（自動等比縮放填滿排列）。每張貼圖四周預留約 0.2 cm Padding，避免畫面互相黏住。</span>
+      <span className="text-neutral-600 dark:text-neutral-400">每張小圖四周預留約 0.2 cm Padding，避免畫面互相黏住。</span>
       {'\n'}
       <span className="text-neutral-600 dark:text-neutral-400">鏡頭多樣化：全身 + 半身混合，必須包含正面、側面、俯角等不同視角。</span>
       {'\n'}
@@ -363,10 +419,6 @@ function PromptPreview({ stickerSet, style, faceRealistic, clothingHanddrawn, tw
           【<mark className="text-red-500 font-bold text-base bg-transparent">{s.title}</mark>】
           {'\n'}
           <span className="text-neutral-600 dark:text-neutral-400">文字：</span><mark className="text-red-500 font-bold text-base bg-transparent">{s.text}</mark>
-          {'\n'}
-          <span className="text-neutral-600 dark:text-neutral-400">動作：</span><mark className="text-red-500 font-bold text-base bg-transparent">{s.action}</mark>
-          {'\n'}
-          <span className="text-neutral-600 dark:text-neutral-400">特效：</span><mark className="text-red-500 font-bold text-base bg-transparent">{s.effect}</mark>
           {'\n'}
           {'\n'}
         </span>
@@ -392,6 +444,7 @@ export default function PromptGenerator() {
   const [fontStyle, setFontStyle] = useState('cute') // 預設：可愛 Q 版字型
   const [customFontDesc, setCustomFontDesc] = useState('') // 自訂字型描述
   const [layoutOption, setLayoutOption] = useState('standard') // 預設：標準排版
+const [sizeOption, setSizeOption] = useState('1480x960') // 預設：1480×960
 
   const generatePrompt = () => {
     const data = STICKER_SETS[selectedSet]
@@ -415,8 +468,8 @@ export default function PromptGenerator() {
 貼紙風格（去背友善）：角色與文字外圍皆需加入 粗白色外框（Sticker Style）。背景統一為 #00FF00（純綠色），不可有雜點。特效勿使用文字顯示（使用手繪製圖案）。
 
 [畫面佈局與尺寸規格]
-整體為 4 × 3 佈局，共 12 張貼圖。總尺寸：2560×1664 px。
-每張小圖約 370 × 320 px（自動等比縮放填滿排列）。每張貼圖四周預留約 0.2 cm Padding，避免畫面互相黏住。
+整體為 4 × 3 佈局，共 12 張貼圖。總尺寸：${SIZE_OPTIONS[sizeOption].desc}。
+每張小圖四周預留約 0.2 cm Padding，避免畫面互相黏住。
 鏡頭多樣化：全身 + 半身混合，必須包含正面、側面、俯角等不同視角。
 
 [文字設計]
@@ -431,9 +484,6 @@ export default function PromptGenerator() {
     data.stickers.forEach((s) => {
       prompt += `【${s.title}】
 文字：${s.text}
-動作：${s.action}
-特效：${s.effect}
-
 `
     })
 
@@ -597,6 +647,20 @@ export default function PromptGenerator() {
           </div>
         )}
 
+        {/* Size selector */}
+        <div className="flex flex-wrap items-center gap-2 mt-2">
+          <span className="text-sm font-medium">{lang === 'zh-TW' ? '尺寸：' : 'Size:'}</span>
+          <select
+            value={sizeOption}
+            onChange={(e) => setSizeOption(e.target.value)}
+            className="px-3 py-1.5 rounded border border-[var(--color-border)] bg-[var(--color-bg)] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+            {Object.entries(SIZE_OPTIONS).map(([key, val]) => (
+              <option key={key} value={key}>{val.label['zh-TW']}</option>
+            ))}
+          </select>
+        </div>
+
         {/* Layout selector */}
         <div className="flex flex-wrap items-center gap-2 mt-2">
           <span className="text-sm font-medium">{lang === 'zh-TW' ? '排版：' : 'Layout:'}</span>
@@ -649,7 +713,7 @@ export default function PromptGenerator() {
         </div>
         <div className="p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
           <div className="text-xs whitespace-pre-wrap font-mono text-[var(--color-text-secondary)] max-h-64 overflow-y-auto">
-            <PromptPreview stickerSet={selectedSet} style={selectedStyle} faceRealistic={faceRealistic} clothingHanddrawn={clothingHanddrawn} twoHeaded={twoHeaded} textLanguage={textLanguage} fontStyle={fontStyle} customFontDesc={customFontDesc} layoutOption={layoutOption} />
+            <PromptPreview stickerSet={selectedSet} style={selectedStyle} faceRealistic={faceRealistic} clothingHanddrawn={clothingHanddrawn} twoHeaded={twoHeaded} textLanguage={textLanguage} fontStyle={fontStyle} customFontDesc={customFontDesc} layoutOption={layoutOption} sizeOption={sizeOption} />
           </div>
         </div>
       </div>

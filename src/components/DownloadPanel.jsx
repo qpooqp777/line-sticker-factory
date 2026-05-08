@@ -3,7 +3,7 @@ import { useLanguage } from '../contexts/LanguageContext'
 import { LINE_STICKER_SIZES } from '../i18n'
 import JSZip from 'jszip'
 
-export default function DownloadPanel({ stickers, mainSticker, tabSticker, startNumber }) {
+export default function DownloadPanel({ stickers, mainSticker, tabSticker, startNumber, onSnackbar }) {
   const { t } = useLanguage()
   const [isDownloading, setIsDownloading] = useState(false)
 
@@ -50,7 +50,7 @@ export default function DownloadPanel({ stickers, mainSticker, tabSticker, start
 
   const downloadAll = async () => {
     if (stickers.length === 0) {
-      alert(t('errorNoImage'))
+      onSnackbar(t('errorNoImage'), 'error')
       return
     }
 
@@ -88,16 +88,20 @@ export default function DownloadPanel({ stickers, mainSticker, tabSticker, start
       const url = URL.createObjectURL(content)
       const link = document.createElement('a')
       link.href = url
-      link.download = `line-stickers-${startNumber}-${startNumber + 11}.zip`
+      // Add date-time to filename: YYYYMMDD_HHmmss
+      const now = new Date()
+      const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '')
+      const timeStr = now.toTimeString().slice(0, 8).replace(/:/g, '')
+      link.download = `line-stickers-${startNumber}-${startNumber + 11}_${dateStr}_${timeStr}.zip`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
       URL.revokeObjectURL(url)
 
-      alert(t('successMessage'))
+      onSnackbar(t('successMessage'), 'success')
     } catch (error) {
       console.error('Download error:', error)
-      alert('Error: ' + error.message)
+      onSnackbar('Error: ' + error.message, 'error')
     } finally {
       setIsDownloading(false)
     }
