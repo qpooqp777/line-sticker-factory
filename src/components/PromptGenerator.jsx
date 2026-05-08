@@ -304,6 +304,44 @@ const STICKER_SETS = {
       { title: '加油', text: '加油', action: '超人握拳鼓勵', effect: '火焰鬥志' },
     ]
   },
+  meme2: {
+    label: { 'zh-TW': '🤣 迷因搞笑2', en: '🤣 Meme 2' },
+    faceStyle: '寫實照片風格，不用重新手繪',
+    clothingStyle: '服裝用手繪方式呈現',
+    stickers: [
+      { title: '無言', text: '...', action: '面無表情盯著前方', effect: '省略號飄浮' },
+      { title: '累爆', text: '累死', action: '癱倒在地上', effect: '靈魂出竅' },
+      { title: '頭痛', text: '頭好痛', action: '雙手抱頭痛苦', effect: '閃電劈頭' },
+      { title: '不科學', text: '不科學！', action: '指著天空驚訝', effect: '問號爆炸' },
+      { title: '算了', text: '算了...', action: '揮手放棄', effect: '灰塵飄散' },
+      { title: '沒救了', text: '沒救了', action: '搖頭嘆氣', effect: '雨滴落下' },
+      { title: '尷尬', text: '好尷尬', action: '冒汗僵住', effect: '尷尬黑線' },
+      { title: '滾啦', text: '滾！', action: '指著遠處趕人', effect: '氣憤火焰' },
+      { title: '不想理你', text: '懶得理', action: '轉頭不理', effect: '冷漠結界' },
+      { title: '你說啥', text: '你說啥？', action: '瞇眼湊近', effect: '懷疑眼鏡' },
+      { title: '嘖嘖嘖', text: '嘖嘖嘖', action: '搖頭咋舌', effect: '不認同符號' },
+      { title: '攤手', text: '攤手', action: '雙手攤開無奈', effect: '無奈符號' },
+    ]
+  },
+  meme3: {
+    label: { 'zh-TW': '🤪 迷因搞笑3', en: '🤪 Meme 3' },
+    faceStyle: '寫實照片風格，不用重新手繪',
+    clothingStyle: '服裝用手繪方式呈現',
+    stickers: [
+      { title: '裝傻', text: '我不知道', action: '摸頭傻笑', effect: '問號泡泡' },
+      { title: '裝酷', text: '酷吧', action: '戴墨鏡歪頭', effect: '帥氣光線' },
+      { title: '震驚臉', text: '震驚！', action: '嘴巴張大到極限', effect: '閃電劈下' },
+      { title: '不屑', text: '哼', action: '歪嘴不屑', effect: '冷笑氣場' },
+      { title: '裝死', text: '我死了', action: '倒地裝死', effect: '靈魂飄走' },
+      { title: '想太多', text: '想太多', action: '托腮思考過度', effect: '思考漩渦' },
+      { title: '不想面對', text: '不要！', action: '矇住眼睛', effect: '拒絕結界' },
+      { title: '吃瓜群眾', text: '看熱鬧', action: '拿瓜子看戲', effect: '八卦光芒' },
+      { title: '佛系', text: '隨緣', action: '雙手合十閉眼', effect: '佛光普照' },
+      { title: '世風日下', text: '世風日下', action: '搖頭感嘆', effect: '嘆息雲朵' },
+      { title: '智商堪憂', text: '智商...', action: '指著腦袋疑惑', effect: '燈泡熄滅' },
+      { title: '給你錢', text: '拿去花', action: '撒錢手勢', effect: '金幣飄落' },
+    ]
+  },
   knight: {
     label: { 'zh-TW': '⚔️ 騎士戰鬥', en: '⚔️ Knight Battle' },
     faceStyle: '寫實照片風格不用重新手繪',
